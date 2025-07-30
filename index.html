@@ -1,0 +1,1909 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بازی چیستان - مراحل جدید</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+        
+        body {
+            min-height: 100vh;
+            overflow: hidden;
+            transition: background 0.8s ease;
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+        
+        /* انیمیشن پس‌زمینه */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* صفحه اول */
+        #home-page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            position: relative;
+            transition: opacity 0.8s ease;
+        }
+        
+        .home-container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 50px 70px;
+            border-radius: 25px;
+            max-width: 90%;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            z-index: 10;
+        }
+        
+        .home-title {
+            color: #FFD700;
+            font-size: 3.5rem;
+            margin-bottom: 40px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            letter-spacing: 2px;
+            animation: titlePulse 3s infinite;
+        }
+        
+        @keyframes titlePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .start-btn {
+            background: linear-gradient(to bottom, #FF9800, #F57C00);
+            color: white;
+            border: none;
+            padding: 22px 60px;
+            font-size: 2rem;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .start-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+            background: linear-gradient(to bottom, #FFA726, #FB8C00);
+        }
+        
+        .start-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .start-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 20px;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: rotate(25deg);
+            transition: all 0.7s;
+        }
+        
+        .start-btn:hover::after {
+            left: 120%;
+        }
+        
+        /* صفحه جزایر */
+        #islands-page {
+            display: none;
+            opacity: 0;
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+            transition: opacity 0.8s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .islands-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 60px;
+            margin-top: 40px;
+        }
+        
+        .island-row {
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            position: relative;
+            width: 100%;
+        }
+        
+        .island {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #43cea2, #185a9d);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            border: 4px solid #FFD700;
+        }
+        
+        .island:hover {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+        }
+        
+        .island.locked {
+            background: linear-gradient(135deg, #606c88, #3f4c6b);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .island.locked:hover {
+            transform: none;
+        }
+        
+        .island.completed {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+            box-shadow: 0 0 20px rgba(255, 152, 0, 0.8);
+        }
+        
+        .island-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        
+        .connector {
+            position: absolute;
+            height: 8px;
+            background: linear-gradient(to right, #FFD700, #FF9800);
+            z-index: 1;
+            transform-origin: left center;
+        }
+        
+        .connector.locked {
+            background: linear-gradient(to right, #7a7a7a, #4a4a4a);
+        }
+        
+        .connector.completed {
+            background: linear-gradient(to right, #43cea2, #185a9d);
+            box-shadow: 0 0 10px rgba(67, 206, 162, 0.8);
+        }
+        
+        .back-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: linear-gradient(to right, #FF9800, #F57C00);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            border: none;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .back-button i {
+            margin-left: 8px;
+        }
+        
+        /* صفحه بازی */
+        #game-page {
+            display: none;
+            opacity: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 20px;
+            transition: opacity 0.8s ease;
+        }
+        
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .game-header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .score-container {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 2px solid #FFD700;
+        }
+        
+        .score-icon {
+            color: #FFD700;
+            font-size: 1.8rem;
+        }
+        
+        .score-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #43cea2;
+        }
+        
+        .help-btn {
+            background: linear-gradient(to right, #43cea2, #185a9d);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .help-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            margin-top: 20px;
+        }
+        
+        .stage-title {
+            color: #FFD700;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .current-word {
+            display: inline-block;
+            margin: 20px auto;
+            padding: 15px 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            font-size: 1.8rem;
+            min-height: 60px;
+            min-width: 300px;
+            letter-spacing: 8px;
+            color: #43cea2;
+            border: 2px solid #FF9800;
+            box-shadow: 0 0 15px rgba(255, 152, 0, 0.4);
+        }
+        
+        .game-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        
+        .riddles-section {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .riddle {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(26, 42, 108, 0.3);
+            border-radius: 10px;
+            border-left: 4px solid #FFD700;
+            position: relative;
+        }
+        
+        .riddle-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: #FF9800;
+            color: #000;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 50%;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+        
+        .riddle-text {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        .answer-boxes {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .letter-box {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #43cea2;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.3);
+            color: #FFD700;
+        }
+        
+        .letters-section {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .letters-circle {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+            touch-action: none;
+        }
+        
+        .letter {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            color: #fff;
+            border: 2px solid #FFD700;
+            z-index: 10;
+        }
+        
+        .letter:hover {
+            transform: scale(1.15);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+        }
+        
+        .letter.selected {
+            background: linear-gradient(135deg, #43cea2, #185a9d);
+            box-shadow: 0 0 25px rgba(67, 206, 162, 0.8);
+        }
+        
+        .drawing-line {
+            position: absolute;
+            height: 4px;
+            background: linear-gradient(to right, #FFD700, #FF9800);
+            transform-origin: left center;
+            z-index: 5;
+            pointer-events: none;
+        }
+        
+        /* مدال کمک */
+        .help-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            border: 2px solid #FFD700;
+        }
+        
+        .modal-title {
+            color: #FFD700;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .modal-text {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .riddle-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .riddle-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #43cea2;
+            border-radius: 10px;
+            padding: 15px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .riddle-option:hover {
+            background: rgba(67, 206, 162, 0.3);
+            transform: translateY(-5px);
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .modal-btn {
+            padding: 12px 30px;
+            border-radius: 30px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .confirm-btn {
+            background: linear-gradient(to right, #43cea2, #185a9d);
+            color: white;
+        }
+        
+        .cancel-btn {
+            background: linear-gradient(to right, #FF9800, #F57C00);
+            color: white;
+        }
+        
+        .modal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* انیمیشن ها */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .island.active {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+        }
+        
+        .island.active {
+            animation: float 4s ease-in-out infinite, pulse 2s infinite;
+        }
+        
+        /* افکت های پس‌زمینه */
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2);
+            animation: floatBubble 15s infinite linear;
+            z-index: 0;
+        }
+        
+        @keyframes floatBubble {
+            0% { 
+                transform: translateY(100vh) scale(0); 
+                opacity: 0;
+            }
+            10% { opacity: 0.2; }
+            90% { opacity: 0.1; }
+            100% { 
+                transform: translateY(-100px) scale(1.2); 
+                opacity: 0;
+            }
+        }
+        
+        /* واکنشگرایی */
+        @media (max-width: 768px) {
+            .home-title {
+                font-size: 2.8rem;
+            }
+            
+            .start-btn {
+                padding: 18px 50px;
+                font-size: 1.8rem;
+            }
+            
+            .island-row {
+                gap: 60px;
+            }
+            
+            .island {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .island-number {
+                font-size: 2rem;
+            }
+            
+            .game-content {
+                flex-direction: column;
+            }
+            
+            .letters-circle {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .riddle-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-header-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .home-container {
+                padding: 30px 20px;
+            }
+            
+            .home-title {
+                font-size: 2.2rem;
+            }
+            
+            .start-btn {
+                padding: 15px 40px;
+                font-size: 1.5rem;
+            }
+            
+            .island-row {
+                gap: 40px;
+            }
+            
+            .island {
+                width: 65px;
+                height: 65px;
+            }
+            
+            .island-number {
+                font-size: 1.6rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .letters-circle {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .letter {
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
+            }
+            
+            .current-word {
+                font-size: 1.5rem;
+                min-width: 250px;
+            }
+        }
+        
+        /* انیمیشن تبریک */
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #FFD700;
+            animation: confetti-fall 3s ease-in-out forwards;
+            z-index: 1000;
+        }
+        
+        .congrats-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .congrats-content {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+            border: 4px solid #FFD700;
+            position: relative;
+        }
+        
+        .congrats-title {
+            color: #FFD700;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+        
+        .congrats-text {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .stage-number {
+            display: inline-block;
+            background: #FF9800;
+            color: #000;
+            font-weight: bold;
+            padding: 10px 30px;
+            border-radius: 30px;
+            font-size: 1.8rem;
+            margin-top: 15px;
+        }
+        
+        .continue-btn {
+            padding: 15px 50px;
+            background: linear-gradient(to right, #43cea2, #185a9d);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .continue-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- صفحه اول -->
+    <div id="home-page">
+        <div class="home-container">
+            <h1 class="home-title">بازی چیستان</h1>
+            <button class="start-btn">شروع بازی</button>
+        </div>
+    </div>
+    
+    <!-- صفحه جزایر -->
+    <div id="islands-page">
+        <div class="container">
+            <header>
+                <h1>مراحل بازی</h1>
+                <p class="subtitle">مراحل خود را انتخاب کنید و به چالش بکشید!</p>
+            </header>
+            
+            <div class="islands-container">
+                <!-- ردیف اول (مراحل 1 تا 4) -->
+                <div class="island-row">
+                    <div class="island active" data-stage="1">
+                        <div class="island-number">1</div>
+                    </div>
+                    
+                    <div class="island locked" data-stage="2">
+                        <div class="island-number">2</div>
+                    </div>
+                    
+                    <div class="island locked" data-stage="3">
+                        <div class="island-number">3</div>
+                    </div>
+                    
+                    <div class="island locked" data-stage="4">
+                        <div class="island-number">4</div>
+                    </div>
+                </div>
+                
+                <!-- ردیف دوم (مراحل 5 و 6) -->
+                <div class="island-row">
+                    <div class="island locked" data-stage="5">
+                        <div class="island-number">5</div>
+                    </div>
+                    
+                    <div class="island locked" data-stage="6">
+                        <div class="island-number">6</div>
+                    </div>
+                </div>
+                
+                <!-- ردیف سوم (مراحل 7 و 8) -->
+                <div class="island-row">
+                    <div class="island locked" data-stage="7">
+                        <div class="island-number">7</div>
+                    </div>
+                    
+                    <div class="island locked" data-stage="8">
+                        <div class="island-number">8</div>
+                    </div>
+                </div>
+                
+                <!-- ردیف چهارم (مراحل 9 و 10) -->
+                <div class="island-row">
+                    <div class="island locked" data-stage="9">
+                        <div class="island-number">9</div>
+                    </div>
+                    
+                    <div class="island locked" data-stage="10">
+                        <div class="island-number">10</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center;">
+                <button class="back-button">
+                    <i class="fas fa-arrow-left"></i> بازگشت به صفحه اصلی
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- صفحه بازی -->
+    <div id="game-page">
+        <div class="game-container">
+            <div class="game-header-controls">
+                <div class="score-container">
+                    <i class="fas fa-star score-icon"></i>
+                    <div class="score-value" id="score">50</div>
+                </div>
+                
+                <button class="help-btn" id="help-btn">
+                    <i class="fas fa-question-circle"></i> درخواست کمک
+                </button>
+            </div>
+            
+            <div class="game-header">
+                <h2 class="stage-title" id="stage-title">مرحله اول</h2>
+                <div class="current-word" id="current-word">کلمه را با کشیدن انگشت بسازید</div>
+            </div>
+            
+            <div class="game-content">
+                <div class="riddles-section" id="riddles-section">
+                    <!-- سوالات به صورت پویا اضافه می‌شوند -->
+                </div>
+                
+                <div class="letters-section">
+                    <div class="letters-circle" id="letters-circle">
+                        <!-- حروف به صورت دایره‌ای با جاوااسکریپت اضافه می‌شوند -->
+                    </div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="back-button" id="back-to-islands">
+                    <i class="fas fa-arrow-left"></i> بازگشت به مراحل
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- مدال کمک -->
+    <div class="help-modal" id="help-modal">
+        <div class="modal-content">
+            <h3 class="modal-title">درخواست کمک</h3>
+            <p class="modal-text">برای کدام سوال کمک می‌خواهید؟ (هر کمک ۵ امتیاز دارد)</p>
+            
+            <div class="riddle-options" id="riddle-options">
+                <div class="riddle-option" data-riddle="1">سوال ۱</div>
+                <div class="riddle-option" data-riddle="2">سوال ۲</div>
+                <div class="riddle-option" data-riddle="3">سوال ۳</div>
+                <div class="riddle-option" data-riddle="4">سوال ۴</div>
+                <div class="riddle-option" data-riddle="5">سوال ۵</div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button class="modal-btn cancel-btn" id="cancel-help">لغو درخواست</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- مدال تبریک -->
+    <div class="congrats-modal" id="congrats-modal">
+        <div class="congrats-content">
+            <h2 class="congrats-title">تبریک!</h2>
+            <p class="congrats-text">شما با موفقیت مرحله را به پایان رساندید!</p>
+            <div class="stage-number">مرحله <span id="completed-stage">1</span></div>
+            <button class="continue-btn" id="continue-btn">ادامه بازی</button>
+        </div>
+    </div>
+    
+    <script>
+        // ایجاد حباب‌های متحرک در پس‌زمینه
+        function createBubbles() {
+            const bubbleCount = 15;
+            const homePage = document.getElementById('home-page');
+            
+            for (let i = 0; i < bubbleCount; i++) {
+                const bubble = document.createElement('div');
+                bubble.classList.add('bubble');
+                
+                // اندازه تصادفی
+                const size = Math.random() * 120 + 20;
+                bubble.style.width = `${size}px`;
+                bubble.style.height = `${size}px`;
+                
+                // موقعیت تصادفی
+                bubble.style.left = `${Math.random() * 100}%`;
+                bubble.style.top = `${Math.random() * 100 + 100}%`;
+                
+                // زمان انیمیشن تصادفی
+                const animationDuration = Math.random() * 20 + 10;
+                bubble.style.animationDuration = `${animationDuration}s`;
+                
+                // تاخیر انیمیشن تصادفی
+                const animationDelay = Math.random() * 5;
+                bubble.style.animationDelay = `${animationDelay}s`;
+                
+                homePage.appendChild(bubble);
+            }
+        }
+        
+        // ایجاد اتصالات بین جزایر
+        function createConnectors() {
+            const islandRows = document.querySelectorAll('.island-row');
+            
+            islandRows.forEach(row => {
+                const islands = row.querySelectorAll('.island');
+                
+                for (let i = 0; i < islands.length - 1; i++) {
+                    const island1 = islands[i];
+                    const island2 = islands[i+1];
+                    
+                    // ایجاد خط اتصال
+                    const connector = document.createElement('div');
+                    connector.classList.add('connector');
+                    
+                    // اگر جزیره بعدی قفل شده باشد، اتصال هم قفل شده است
+                    if (island2.classList.contains('locked')) {
+                        connector.classList.add('locked');
+                    }
+                    
+                    row.appendChild(connector);
+                    
+                    // موقعیت یابی خط اتصال
+                    positionConnector(island1, island2, connector);
+                }
+            });
+        }
+        
+        // تابع برای موقعیت دهی خطوط اتصال
+        function positionConnector(island1, island2, connector) {
+            const rect1 = island1.getBoundingClientRect();
+            const rect2 = island2.getBoundingClientRect();
+            
+            const x1 = rect1.left + rect1.width / 2;
+            const y1 = rect1.top + rect1.height / 2;
+            const x2 = rect2.left + rect2.width / 2;
+            const y2 = rect2.top + rect2.height / 2;
+            
+            const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+            const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+            
+            connector.style.width = length + 'px';
+            connector.style.left = x1 + 'px';
+            connector.style.top = y1 + 'px';
+            connector.style.transform = `rotate(${angle}deg)`;
+        }
+        
+        // مدیریت تغییر سایز صفحه
+        function handleResize() {
+            document.querySelectorAll('.connector').forEach(connector => {
+                connector.remove();
+            });
+            
+            document.querySelectorAll('.island-row').forEach(row => {
+                const islands = row.querySelectorAll('.island');
+                
+                for (let i = 0; i < islands.length - 1; i++) {
+                    const island1 = islands[i];
+                    const island2 = islands[i+1];
+                    
+                    const connector = document.createElement('div');
+                    connector.classList.add('connector');
+                    
+                    if (island2.classList.contains('locked')) {
+                        connector.classList.add('locked');
+                    }
+                    
+                    row.appendChild(connector);
+                    positionConnector(island1, island2, connector);
+                }
+            });
+        }
+        
+        // تعریف مراحل بازی
+        const stages = {
+            1: {
+                title: "مرحله اول",
+                riddles: [
+                    { 
+                        question: "دختری چهارده ساله بالغ شود چون به سن 30 رسد بچه شود", 
+                        answer: "ماه",
+                        boxes: 3
+                    },
+                    { 
+                        question: "از میان آب می‌گذرد ولی خیس نمی‌شود", 
+                        answer: "نور",
+                        boxes: 3
+                    },
+                    { 
+                        question: "نه دست دارد نه پا اما از همه جا خبر دارد", 
+                        answer: "باد",
+                        boxes: 3
+                    },
+                    { 
+                        question: "آن چیست که تا آسمان نگیرد اشکش روان نمی‌شود", 
+                        answer: "باران",
+                        boxes: 5
+                    },
+                    { 
+                        question: "آنچه بچه‌ای است که وقتی به مادرش می‌رسد ناپدید می‌شود", 
+                        answer: "رودخانه",
+                        boxes: 7
+                    }
+                ],
+                letters: ['ب', 'م', 'و', 'ا', 'د', 'ن', 'خ', 'ر', 'ه']
+            },
+            2: {
+                title: "مرحله دوم",
+                riddles: [
+                    { 
+                        question: "ان کدام گیاه است که لباس سیاهی به تنش و کلاه سبزی به سرش", 
+                        answer: "بادمجان",
+                        boxes: 6
+                    },
+                    { 
+                        question: "اولم اول پیاز است دومم اول ساز است سومم اول تاب است چهارمم اخر هسته توی صندوقچه ی بسته", 
+                        answer: "پسته",
+                        boxes: 5
+                    },
+                    { 
+                        question: "ان چیست که پای کوه عمامه به سر نشسته", 
+                        answer: "قارچ",
+                        boxes: 4
+                    },
+                    { 
+                        question: "ان کدام حیوانه که خود ریسد و خود بافد جامه ولی خود او باشد عریان", 
+                        answer: "عنکبوت",
+                        boxes: 7
+                    },
+                    { 
+                        question: "ان چیست که صدها تیغ دارد ولی گل ندارد", 
+                        answer: "جوجه تیغی",
+                        boxes: 9
+                    }
+                ],
+                letters: ['ب', 'ا', 'د', 'م', 'ج', 'ن', 'پ', 'س', 'ت', 'ه', 'ق', 'ر', 'چ', 'ع', 'ک', 'و', 'ج', 'ی', 'غ']
+            },
+            3: {
+                title: "مرحله سوم",
+                riddles: [
+                    { 
+                        question: "نام یک پرنده و یک غذای ایرانی است", 
+                        answer: "کوکو",
+                        boxes: 4
+                    },
+                    { 
+                        question: "کدام حیوان خطرناک است که اگر ان را برعکس کنیم رام می شود", 
+                        answer: "مار",
+                        boxes: 3
+                    },
+                    { 
+                        question: "کدام حیوان است که از هر طرف نگاهش کنی انسان را می درد", 
+                        answer: "گرگ",
+                        boxes: 4
+                    },
+                    { 
+                        question: "چیست انچه سرش را ببری زنده میشود", 
+                        answer: "خزنده",
+                        boxes: 6
+                    },
+                    { 
+                        question: "ان چیست که بی صدا زنگ میزند", 
+                        answer: "اهن",
+                        boxes: 3
+                    }
+                ],
+                letters: ['ک', 'و', 'م', 'ا', 'ر', 'گ', 'خ', 'ز', 'ن', 'د', 'ه']
+            },
+            4: {
+                title: "مرحله چهارم",
+                riddles: [
+                    { 
+                        question: "ان چیست که می نویسد اما نمی تواند بخواند", 
+                        answer: "قلم",
+                        boxes: 4
+                    },
+                    { 
+                        question: "دندان دارد ولی چیزی نمی خورد", 
+                        answer: "شانه",
+                        boxes: 5
+                    },
+                    { 
+                        question: "جان دارد ولی نفس نمی کشد", 
+                        answer: "فنجان",
+                        boxes: 5
+                    },
+                    { 
+                        question: "ان چیست که هر چه در ان اب میریزند پر نمیشود", 
+                        answer: "ابکش",
+                        boxes: 5
+                    },
+                    { 
+                        question: "ان چیست که بی علم و دانش تمام اشیا را همان گونه که هست به ما نشان می دهد", 
+                        answer: "ایینه",
+                        boxes: 5
+                    }
+                ],
+                letters: ['ق', 'ل', 'م', 'ش', 'ا', 'ن', 'ه', 'ف', 'ج', 'ب', 'ک', 'ی']
+            },
+            5: {
+                title: "مرحله پنجم",
+                riddles: [
+                    { 
+                        question: "ان چیست که هر چی سیاه تر باشد تمیز تر است", 
+                        answer: "تخته سیاه",
+                        boxes: 10
+                    },
+                    { 
+                        question: "ان چیست که همیسه دستش به کمرش است و ایستاده", 
+                        answer: "افتابه",
+                        boxes: 6
+                    },
+                    { 
+                        question: "برنده است ولی اره نیست ریشه دارد ولی درخت نیست سفید است ولی برف نیست میکشند اما نه با ترازو", 
+                        answer: "دندان",
+                        boxes: 5
+                    },
+                    { 
+                        question: "صندوق پر از استخوان عروسک گوشتی بین ان رقصان", 
+                        answer: "دهان",
+                        boxes: 4
+                    },
+                    { 
+                        question: "کدام کشور در پیشانی ما جا دارد", 
+                        answer: "چین",
+                        boxes: 3
+                    }
+                ],
+                letters: ['ت', 'خ', 'ه', 'س', 'ی', 'ا', 'ف', 'ب', 'د', 'ن', 'چ']
+            },
+            6: {
+                title: "مرحله ششم",
+                riddles: [
+                    { 
+                        question: "چه کشوری است که در چشم ماست", 
+                        answer: "کره",
+                        boxes: 3
+                    },
+                    { 
+                        question: "نام کدام شهر است که بر عکسش را بچه ها می نویسند", 
+                        answer: "قشم",
+                        boxes: 3
+                    },
+                    { 
+                        question: "مادر خواهر پدرت چه نسبتی با تو دارد", 
+                        answer: "مادربزرگ",
+                        boxes: 8
+                    },
+                    { 
+                        question: "حسن پدر حسین و حسین پدر علی است و اگر تقی فرزند حسن باشد چه نسبتی با علی خواهد داشت", 
+                        answer: "عمو",
+                        boxes: 2
+                    },
+                    { 
+                        question: "مادر خواهر زاده چه نسبتی با برادر مادر دارد", 
+                        answer: "خواهر",
+                        boxes: 5
+                    }
+                ],
+                letters: ['ک', 'ر', 'ه', 'ق', 'ش', 'م', 'ا', 'د', 'ب', 'ز', 'گ', 'ع', 'و', 'خ']
+            },
+            // مرحله هفتم جدید
+            7: {
+                title: "مرحله هفتم",
+                riddles: [
+                    { 
+                        question: "بعضی از ماه ها 30 روز دارند و بعضی ها 31 روز و چند ماه 29 روز دارد", 
+                        answer: "دوازده",
+                        boxes: 6
+                    },
+                    { 
+                        question: "ان چیست که هرچه بکشیم زیادتر میشود", 
+                        answer: "خط",
+                        boxes: 3
+                    },
+                    { 
+                        question: "ان چیست که هر چه بکشیم کمتر میشود", 
+                        answer: "سیگار",
+                        boxes: 5
+                    },
+                    { 
+                        question: "ان چیست که در دهان است و هم از نام های دختران است و هم نام پرنده است و هم نام یک گل زیبا", 
+                        answer: "مینا",
+                        boxes: 4
+                    },
+                    { 
+                        question: "ان چیست که هم در اشپزخانه است و هم در اتوموبیل", 
+                        answer: "گاز",
+                        boxes: 3
+                    }
+                ],
+                letters: ['د', 'و', 'ا', 'ز', 'ه', 'خ', 'ط', 'س', 'ی', 'گ', 'ر', 'م', 'ن']
+            },
+            // مرحله هشتم جدید
+            8: {
+                title: "مرحله هشتم",
+                riddles: [
+                    { 
+                        question: "ان چیست که پیش روی ماست ولی دیده نمیشود", 
+                        answer: "اینده",
+                        boxes: 5
+                    },
+                    { 
+                        question: "ان چیست که در اسمان یکی است در زمین چهار تا", 
+                        answer: "نقطه",
+                        boxes: 5
+                    },
+                    { 
+                        question: "ان چیست که با اب میشود کباب", 
+                        answer: "کب",
+                        boxes: 2
+                    },
+                    { 
+                        question: "ان چیست که در خیابان هست ولی در بیابان نیست", 
+                        answer: "خ",
+                        boxes: 1
+                    },
+                    { 
+                        question: "ان چیست که هم پا ان را دارد و هم صابون", 
+                        answer: "کف",
+                        boxes: 2
+                    }
+                ],
+                letters: ['ا', 'ی', 'ن', 'د', 'ه', 'ق', 'ط', 'ک', 'ب', 'خ', 'ف']
+            },
+            // مرحله نهم جدید
+            9: {
+                title: "مرحله نهم",
+                riddles: [
+                    { 
+                        question: "پدر علی سه پسر دارد به نام حسن و حامد نام پسر سوم او چیست", 
+                        answer: "علی",
+                        boxes: 3
+                    },
+                    { 
+                        question: "ان چیست که تا اسمش را بیاوری میشکند", 
+                        answer: "سکوت",
+                        boxes: 5
+                    },
+                    { 
+                        question: "ان چیست که هم در اسمان است و هم در مغازه", 
+                        answer: "مشتری",
+                        boxes: 6
+                    },
+                    { 
+                        question: "ان چیست که پولدار دارد ولی گدا ندارد", 
+                        answer: "نقطه",
+                        boxes: 5
+                    },
+                    { 
+                        question: "فرض کن در یک مسابقه شرکت کرده اید . شما از نفر دوم سبقت میگیرید حالا نفر چندم هستید", 
+                        answer: "دوم",
+                        boxes: 3
+                    }
+                ],
+                letters: ['ع', 'ل', 'ی', 'س', 'ک', 'و', 'ت', 'م', 'ش', 'ر', 'ن', 'ق', 'ط', 'ه', 'د']
+            },
+            // مرحله دهم جدید
+            10: {
+                title: "مرحله دهم",
+                riddles: [
+                    { 
+                        question: "اگر شما در مسابقه ای از سوم سبقت بگیرید نفر چندم خواهید بود", 
+                        answer: "سوم",
+                        boxes: 3
+                    },
+                    { 
+                        question: "ایه ای که بی نقطه است در کدام سوره قرار دارد", 
+                        answer: "توحید",
+                        boxes: 5
+                    },
+                    { 
+                        question: "ان چیست که اگر بریزد نمیتوان ان را جمع کرد", 
+                        answer: "ابرو",
+                        boxes: 4
+                    },
+                    { 
+                        question: "تورات کتاب کدام پیامبر بود", 
+                        answer: "موسی",
+                        boxes: 4
+                    },
+                    { 
+                        question: "خوش صدا ترین پیامبر", 
+                        answer: "داوود",
+                        boxes: 5
+                    }
+                ],
+                letters: ['س', 'و', 'م', 'ت', 'ح', 'ی', 'د', 'ا', 'ب', 'ر', 'ط', 'ک', 'ف']
+            }
+        };
+        
+        // متغیرهای بازی
+        let currentStage = 1;
+        let score = 50; // بازیکن با 50 امتیاز شروع می‌کند
+        let isDrawing = false;
+        let currentWord = "";
+        let selectedLetters = [];
+        let lastSelectedLetter = null;
+        let drawingLine = null;
+        let lastPosition = null;
+        let solvedRiddles = {};
+        let completedStages = {};
+        
+        // رویداد کلیک برای دکمه شروع
+        document.querySelector('.start-btn').addEventListener('click', function() {
+            const homePage = document.getElementById('home-page');
+            const islandsPage = document.getElementById('islands-page');
+            
+            // افکت انتقال صفحه
+            homePage.style.opacity = '0';
+            
+            setTimeout(() => {
+                homePage.style.display = 'none';
+                islandsPage.style.display = 'block';
+                
+                setTimeout(() => {
+                    islandsPage.style.opacity = '1';
+                    createConnectors();
+                }, 50);
+            }, 800);
+        });
+        
+        // رویداد کلیک برای دکمه بازگشت
+        document.querySelector('.back-button').addEventListener('click', function() {
+            const homePage = document.getElementById('home-page');
+            const islandsPage = document.getElementById('islands-page');
+            
+            // افکت انتقال صفحه
+            islandsPage.style.opacity = '0';
+            
+            setTimeout(() => {
+                islandsPage.style.display = 'none';
+                homePage.style.display = 'flex';
+                
+                setTimeout(() => {
+                    homePage.style.opacity = '1';
+                }, 50);
+            }, 800);
+        });
+        
+        // رویداد کلیک برای جزایر فعال
+        document.querySelectorAll('.island').forEach(island => {
+            island.addEventListener('click', function() {
+                if (this.classList.contains('locked') || this.classList.contains('completed')) {
+                    return;
+                }
+                
+                currentStage = parseInt(this.getAttribute('data-stage'));
+                
+                const islandsPage = document.getElementById('islands-page');
+                const gamePage = document.getElementById('game-page');
+                
+                // افکت انتقال صفحه
+                islandsPage.style.opacity = '0';
+                
+                setTimeout(() => {
+                    islandsPage.style.display = 'none';
+                    gamePage.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        gamePage.style.opacity = '1';
+                        loadStage(currentStage);
+                    }, 50);
+                }, 800);
+            });
+        });
+        
+        // بارگذاری مرحله بازی
+        function loadStage(stageNumber) {
+            const stage = stages[stageNumber];
+            
+            // به روزرسانی عنوان مرحله
+            document.getElementById('stage-title').textContent = stage.title;
+            
+            // ایجاد سوالات
+            const riddlesSection = document.getElementById('riddles-section');
+            riddlesSection.innerHTML = '';
+            
+            stage.riddles.forEach((riddle, index) => {
+                const riddleId = index + 1;
+                
+                const riddleElement = document.createElement('div');
+                riddleElement.classList.add('riddle');
+                riddleElement.innerHTML = `
+                    <span class="riddle-number">${riddleId}</span>
+                    <p class="riddle-text">${riddle.question}</p>
+                    <div class="answer-boxes" id="answer-${riddleId}">
+                        ${'<div class="letter-box"></div>'.repeat(riddle.boxes)}
+                    </div>
+                `;
+                
+                riddlesSection.appendChild(riddleElement);
+            });
+            
+            // ایجاد حروف دایره‌ای
+            createLettersCircle(stage.letters);
+            
+            // راه‌اندازی سیستم کشیدن انگشت
+            setupDrawing();
+            
+            // تنظیم امتیاز
+            document.getElementById('score').textContent = score;
+            
+            // پاک کردن کلمه فعلی
+            currentWord = "";
+            document.getElementById('current-word').textContent = "کلمه را با کشیدن انگشت بسازید";
+        }
+        
+        // ایجاد حروف دایره‌ای
+        function createLettersCircle(letters) {
+            const lettersCircle = document.getElementById('letters-circle');
+            lettersCircle.innerHTML = '';
+            
+            const radius = 120;
+            const centerX = 150;
+            const centerY = 150;
+            
+            // ترکیب تصادفی حروف
+            const shuffledLetters = [...letters].sort(() => Math.random() - 0.5);
+            
+            shuffledLetters.forEach((letter, index) => {
+                const angle = (index / shuffledLetters.length) * 2 * Math.PI;
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                
+                const letterElem = document.createElement('div');
+                letterElem.classList.add('letter');
+                letterElem.textContent = letter;
+                letterElem.style.left = `${x - 25}px`;
+                letterElem.style.top = `${y - 25}px`;
+                letterElem.dataset.letter = letter;
+                
+                lettersCircle.appendChild(letterElem);
+            });
+        }
+        
+        // راه‌اندازی سیستم کشیدن انگشت
+        function setupDrawing() {
+            const lettersCircle = document.getElementById('letters-circle');
+            
+            // تنظیم رویدادهای لمسی
+            lettersCircle.addEventListener('touchstart', startDrawing);
+            lettersCircle.addEventListener('touchmove', draw);
+            lettersCircle.addEventListener('touchend', endDrawing);
+            
+            // تنظیم رویدادهای ماوس برای دسکتاپ
+            lettersCircle.addEventListener('mousedown', startDrawing);
+            lettersCircle.addEventListener('mousemove', draw);
+            lettersCircle.addEventListener('mouseup', endDrawing);
+            lettersCircle.addEventListener('mouseleave', endDrawing);
+        }
+        
+        // شروع کشیدن
+        function startDrawing(e) {
+            e.preventDefault();
+            isDrawing = true;
+            currentWord = "";
+            selectedLetters = [];
+            lastSelectedLetter = null;
+            lastPosition = null;
+            
+            // پاک کردن حروف انتخاب شده قبلی
+            document.querySelectorAll('.letter').forEach(letter => {
+                letter.classList.remove('selected');
+            });
+            
+            // ایجاد خط جدید
+            drawingLine = document.createElement('div');
+            drawingLine.classList.add('drawing-line');
+            drawingLine.style.display = 'none';
+            document.getElementById('letters-circle').appendChild(drawingLine);
+            
+            // به روزرسانی نمایش کلمه
+            document.getElementById('current-word').textContent = "کلمه را با کشیدن انگشت بسازید";
+            
+            // شروع رسم از موقعیت فعلی
+            const point = getEventPoint(e);
+            lastPosition = point;
+            
+            // بررسی اینکه آیا روی حرف شروع کرده‌اید
+            const element = document.elementFromPoint(point.x, point.y);
+            if (element && element.classList.contains('letter')) {
+                addLetter(element);
+            }
+        }
+        
+        // کشیدن انگشت روی صفحه
+        function draw(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            
+            const point = getEventPoint(e);
+            
+            // رسم خط
+            if (lastPosition && drawingLine) {
+                const dx = point.x - lastPosition.x;
+                const dy = point.y - lastPosition.y;
+                const length = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                
+                drawingLine.style.width = `${length}px`;
+                drawingLine.style.left = `${lastPosition.x}px`;
+                drawingLine.style.top = `${lastPosition.y}px`;
+                drawingLine.style.transform = `rotate(${angle}deg)`;
+                drawingLine.style.display = 'block';
+            }
+            
+            // بررسی حروف
+            const element = document.elementFromPoint(point.x, point.y);
+            if (element && element.classList.contains('letter')) {
+                addLetter(element);
+            }
+            
+            lastPosition = point;
+        }
+        
+        // پایان کشیدن
+        function endDrawing(e) {
+            if (!isDrawing) return;
+            e.preventDefault();
+            
+            isDrawing = false;
+            
+            // حذف خط رسم
+            if (drawingLine) {
+                drawingLine.remove();
+                drawingLine = null;
+            }
+            
+            // بررسی کلمه ساخته شده
+            if (currentWord) {
+                checkWord();
+            }
+        }
+        
+        // افزودن حرف به کلمه فعلی
+        function addLetter(letterElement) {
+            // اگر حرف همان حرف قبلی است، نادیده بگیر
+            if (letterElement === lastSelectedLetter) return;
+            
+            const letter = letterElement.dataset.letter;
+            
+            // افزودن حرف به کلمه
+            currentWord += letter;
+            letterElement.classList.add('selected');
+            selectedLetters.push(letterElement);
+            
+            // به روزرسانی نمایش کلمه
+            document.getElementById('current-word').textContent = currentWord;
+            
+            lastSelectedLetter = letterElement;
+        }
+        
+        // تابع برای دریافت موقعیت اشاره‌گر
+        function getEventPoint(e) {
+            if (e.touches && e.touches.length > 0) {
+                return {
+                    x: e.touches[0].clientX,
+                    y: e.touches[0].clientY
+                };
+            } else if (e.clientX && e.clientY) {
+                return {
+                    x: e.clientX,
+                    y: e.clientY
+                };
+            }
+            return lastPosition || {x: 0, y: 0};
+        }
+        
+        // تابع بررسی کلمه ساخته شده
+        function checkWord() {
+            if (!currentWord) return;
+            
+            const stage = stages[currentStage];
+            
+            // بررسی اینکه کلمه ساخته شده با کدام پاسخ مطابقت دارد
+            for (let i = 0; i < stage.riddles.length; i++) {
+                const riddle = stage.riddles[i];
+                const riddleId = i + 1;
+                
+                if (currentWord === riddle.answer) {
+                    // پر کردن جواب در باکس‌ها
+                    const answerBoxes = document.getElementById(`answer-${riddleId}`).children;
+                    for (let j = 0; j < riddle.answer.length; j++) {
+                        answerBoxes[j].textContent = riddle.answer[j];
+                    }
+                    
+                    // افزودن امتیاز
+                    score += riddle.answer.length;
+                    document.getElementById('score').textContent = score;
+                    
+                    // علامت گذاری به عنوان حل شده
+                    solvedRiddles[`${currentStage}-${riddleId}`] = true;
+                    
+                    // نمایش پیام موفقیت
+                    setTimeout(() => {
+                        alert(`تبریک! پاسخ صحیح «${riddle.answer}» است. ${riddle.answer.length} امتیاز دریافت کردید!`);
+                    }, 300);
+                    
+                    // بررسی تکمیل مرحله
+                    checkStageCompletion();
+                    
+                    resetGame();
+                    return;
+                }
+            }
+            
+            // اگر کلمه با هیچ پاسخی مطابقت نداشت
+            setTimeout(() => {
+                alert(`کلمه «${currentWord}» پاسخ هیچ یک از چیستان‌ها نیست.`);
+                resetGame();
+            }, 300);
+        }
+        
+        // بررسی تکمیل مرحله
+        function checkStageCompletion() {
+            const stage = stages[currentStage];
+            let allSolved = true;
+            
+            for (let i = 0; i < stage.riddles.length; i++) {
+                const riddleId = i + 1;
+                if (!solvedRiddles[`${currentStage}-${riddleId}`]) {
+                    allSolved = false;
+                    break;
+                }
+            }
+            
+            if (allSolved) {
+                // علامت گذاری مرحله به عنوان تکمیل شده
+                completedStages[currentStage] = true;
+                
+                // نمایش پیام تبریک با انیمیشن
+                setTimeout(() => {
+                    showCongrats(currentStage);
+                }, 1000);
+            }
+        }
+        
+        // نمایش انیمیشن تبریک
+        function showCongrats(stageNumber) {
+            const congratsModal = document.getElementById('congrats-modal');
+            const completedStage = document.getElementById('completed-stage');
+            
+            completedStage.textContent = stageNumber;
+            congratsModal.style.display = 'flex';
+            
+            // ایجاد کنفتی
+            createConfetti();
+        }
+        
+        // ایجاد انیمیشن کنفتی
+        function createConfetti() {
+            const colors = ['#FFD700', '#43cea2', '#FF9800', '#185a9d', '#b21f1f'];
+            const confettiCount = 150;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                // رنگ تصادفی
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.backgroundColor = color;
+                
+                // موقعیت تصادفی
+                confetti.style.left = `${Math.random() * 100}%`;
+                
+                // اندازه تصادفی
+                const size = Math.random() * 10 + 5;
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                
+                // زمان انیمیشن تصادفی
+                const duration = Math.random() * 3 + 2;
+                confetti.style.animationDuration = `${duration}s`;
+                
+                // تاخیر انیمیشن تصادفی
+                const delay = Math.random() * 2;
+                confetti.style.animationDelay = `${delay}s`;
+                
+                document.body.appendChild(confetti);
+                
+                // حذف کنفتی پس از پایان انیمیشن
+                setTimeout(() => {
+                    confetti.remove();
+                }, (duration + delay) * 1000);
+            }
+        }
+        
+        // تابع ریست کردن بازی
+        function resetGame() {
+            currentWord = "";
+            selectedLetters = [];
+            document.getElementById('current-word').textContent = "کلمه را با کشیدن انگشت بسازید";
+            
+            document.querySelectorAll('.letter').forEach(letter => {
+                letter.classList.remove('selected');
+            });
+        }
+        
+        // رویداد کلیک برای بازگشت از صفحه بازی به جزایر
+        document.getElementById('back-to-islands').addEventListener('click', function() {
+            const islandsPage = document.getElementById('islands-page');
+            const gamePage = document.getElementById('game-page');
+            
+            // افکت انتقال صفحه
+            gamePage.style.opacity = '0';
+            
+            setTimeout(() => {
+                gamePage.style.display = 'none';
+                islandsPage.style.display = 'block';
+                
+                setTimeout(() => {
+                    islandsPage.style.opacity = '1';
+                }, 50);
+            }, 800);
+        });
+        
+        // سیستم کمک
+        document.getElementById('help-btn').addEventListener('click', function() {
+            document.getElementById('help-modal').style.display = 'flex';
+        });
+        
+        document.getElementById('cancel-help').addEventListener('click', function() {
+            document.getElementById('help-modal').style.display = 'none';
+        });
+        
+        document.querySelectorAll('.riddle-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const riddleId = parseInt(this.getAttribute('data-riddle'));
+                
+                // بررسی امتیاز کافی
+                if (score < 5) {
+                    alert('امتیاز کافی ندارید! حداقل ۵ امتیاز نیاز دارید.');
+                    return;
+                }
+                
+                const stage = stages[currentStage];
+                const riddle = stage.riddles[riddleId - 1];
+                const answerBoxes = document.getElementById(`answer-${riddleId}`).children;
+                
+                // پیدا کردن جای خالی برای نمایش حرف
+                let emptyIndexes = [];
+                for (let i = 0; i < riddle.answer.length; i++) {
+                    if (!answerBoxes[i].textContent) {
+                        emptyIndexes.push(i);
+                    }
+                }
+                
+                // اگر همه حروف نمایش داده شده‌اند
+                if (emptyIndexes.length === 0) {
+                    alert('همه حروف این سوال قبلاً نمایش داده شده‌اند!');
+                    return;
+                }
+                
+                // انتخاب تصادفی یک جای خالی
+                const randomIndex = emptyIndexes[Math.floor(Math.random() * emptyIndexes.length)];
+                
+                // نمایش حرف
+                answerBoxes[randomIndex].textContent = riddle.answer[randomIndex];
+                
+                // کسر امتیاز
+                score -= 5;
+                document.getElementById('score').textContent = score;
+                
+                // بستن مدال
+                document.getElementById('help-modal').style.display = 'none';
+                
+                // نمایش پیام
+                alert(`حرف "${riddle.answer[randomIndex]}" برای سوال ${riddleId} نمایش داده شد. ۵ امتیاز کسر شد.`);
+            });
+        });
+        
+        // رویداد کلیک برای دکمه ادامه در مدال تبریک
+        document.getElementById('continue-btn').addEventListener('click', function() {
+            const congratsModal = document.getElementById('congrats-modal');
+            const islandsPage = document.getElementById('islands-page');
+            const gamePage = document.getElementById('game-page');
+            
+            // بستن مدال تبریک
+            congratsModal.style.display = 'none';
+            
+            // رفتن به صفحه جزایر
+            gamePage.style.opacity = '0';
+            
+            setTimeout(() => {
+                gamePage.style.display = 'none';
+                islandsPage.style.display = 'block';
+                
+                setTimeout(() => {
+                    islandsPage.style.opacity = '1';
+                    
+                    // به‌روزرسانی جزایر
+                    updateIslands();
+                    
+                    // باز کردن مرحله بعدی
+                    unlockNextStage();
+                }, 50);
+            }, 800);
+        });
+        
+        // به‌روزرسانی جزایر پس از تکمیل مرحله
+        function updateIslands() {
+            const islands = document.querySelectorAll('.island');
+            
+            islands.forEach(island => {
+                const stageNum = parseInt(island.dataset.stage);
+                
+                if (completedStages[stageNum]) {
+                    island.classList.remove('locked', 'active');
+                    island.classList.add('completed');
+                }
+            });
+        }
+        
+        // باز کردن مرحله بعدی
+        function unlockNextStage() {
+            const nextStage = currentStage + 1;
+            
+            if (nextStage <= 10) {
+                const nextIsland = document.querySelector(`.island[data-stage="${nextStage}"]`);
+                
+                if (nextIsland && nextIsland.classList.contains('locked')) {
+                    nextIsland.classList.remove('locked');
+                    nextIsland.classList.add('active');
+                    
+                    // به‌روزرسانی اتصالات
+                    handleResize();
+                }
+            }
+        }
+        
+        // ایجاد حباب‌ها و اتصالات پس از لود صفحه
+        window.addEventListener('load', function() {
+            createBubbles();
+            
+            // ایجاد اتصالات برای صفحه جزایر (اگر مستقیماً باز شود)
+            if (document.getElementById('islands-page').style.display === 'block') {
+                createConnectors();
+            }
+        });
+        
+        // مدیریت تغییر سایز صفحه
+        window.addEventListener('resize', handleResize);
+    </script>
+</body>
+</html>
